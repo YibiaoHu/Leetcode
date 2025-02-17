@@ -1,1 +1,65 @@
+class ListNode:
+    def __init__(self, val = 0, next = None):
+        self.val = val
+        self.next = None
 
+
+#链表与list相比的优劣势：
+#1.链表插入和删除非常方便，而list非常麻烦
+#2.链表查找数据需要从头开始遍历，也就是n个节点的链表的查询时间复杂度为O(n),而list的查询相对简单
+
+
+class Solution:
+    # 实现反转链表
+    def reverseListNode(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        pre = None
+        cur = head
+        while cur:
+            nxt = cur.next
+            cur.next = pre
+            pre = cur
+            cur = nxt
+        return pre
+
+    # 合并两个有序链表
+    def mergeTwoListNode(self, list1:Optional[ListNode], list2:Optional[ListNode]) -> Optional[ListNode]:
+        cur = dummy = ListNode()
+        while list1 and list2:
+            if list1.val < list2:
+                cur.next = list1
+                list1 = list1.next
+            else:
+                cur.next = list2
+                list2 = list2.next
+            cur = cur.next
+        cur.next = list1 if list1 else list2
+        return dummy.next
+
+    # 返回链表中间节点,使用快慢指针法
+    def midNode(self, head:Optional[ListNode]) -> Optional[ListNode]:
+        slow = fast = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+
+    #判断链表是否为回文链表
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        mid = self.midNode(head)
+        head2 = self.reverseListNode(mid)
+        while head2:
+            if head.val != head2.val:
+                return False
+            head = head.next
+            head2 = head2.next
+        return True
+
+    #判断链表是否有回环,快慢指针
+    def hasCycle(self, head:Optional[ListNode]) -> bool:
+        slow = fast = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if fast == slow:
+                return True
+        return False
